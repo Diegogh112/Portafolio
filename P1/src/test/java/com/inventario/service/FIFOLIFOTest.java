@@ -2,6 +2,9 @@ package com.inventario.service;
 
 import com.inventario.config.InventarioConfig;
 import com.inventario.model.entity.Kardex;
+import com.inventario.model.entity.TipoMovimiento;
+import com.inventario.repository.*;
+import com.inventario.mapper.MovimientoMapper;
 import com.inventario.service.impl.MovimientoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class FIFOLIFOTest {
 
     @Mock
+    private MovimientoRepository movimientoRepository;
+    
+    @Mock
+    private ProductoRepository productoRepository;
+    
+    @Mock
+    private AlmacenRepository almacenRepository;
+    
+    @Mock
+    private KardexRepository kardexRepository;
+    
+    @Mock
+    private MovimientoMapper movimientoMapper;
+    
+    @Mock
     private InventarioConfig inventarioConfig;
 
     private MovimientoServiceImpl movimientoService;
@@ -27,7 +45,12 @@ class FIFOLIFOTest {
     @BeforeEach
     void setUp() {
         movimientoService = new MovimientoServiceImpl(
-                null, null, null, null, null, inventarioConfig
+                movimientoRepository,
+                productoRepository,
+                almacenRepository,
+                kardexRepository,
+                movimientoMapper,
+                inventarioConfig
         );
     }
 
@@ -40,12 +63,14 @@ class FIFOLIFOTest {
         entrada1.setCantidad(10);
         entrada1.setCostoUnitario(new BigDecimal("100.00"));
         entrada1.setFecha(LocalDateTime.now().minusDays(2));
+        entrada1.setTipo(TipoMovimiento.ENTRADA);
         entradas.add(entrada1);
 
         Kardex entrada2 = new Kardex();
         entrada2.setCantidad(5);
         entrada2.setCostoUnitario(new BigDecimal("120.00"));
         entrada2.setFecha(LocalDateTime.now().minusDays(1));
+        entrada2.setTipo(TipoMovimiento.ENTRADA);
         entradas.add(entrada2);
 
         Integer cantidadSolicitada = 12;
@@ -68,12 +93,14 @@ class FIFOLIFOTest {
         entrada1.setCantidad(10);
         entrada1.setCostoUnitario(new BigDecimal("100.00"));
         entrada1.setFecha(LocalDateTime.now().minusDays(2));
+        entrada1.setTipo(TipoMovimiento.ENTRADA);
         entradas.add(entrada1);
 
         Kardex entrada2 = new Kardex();
         entrada2.setCantidad(5);
         entrada2.setCostoUnitario(new BigDecimal("120.00"));
         entrada2.setFecha(LocalDateTime.now().minusDays(1));
+        entrada2.setTipo(TipoMovimiento.ENTRADA);
         entradas.add(entrada2);
 
         Integer cantidadSolicitada = 12;
