@@ -2,6 +2,7 @@ package com.inventario.service.impl;
 
 import com.inventario.model.dto.StockAlmacenDTO;
 import com.inventario.model.dto.StockDTO;
+import com.inventario.model.entity.Kardex;
 import com.inventario.repository.KardexRepository;
 import com.inventario.repository.ProductoRepository;
 import com.inventario.service.ReporteService;

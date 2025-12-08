@@ -130,7 +130,8 @@ public class MovimientoServiceImpl implements MovimientoService {
 
         // Calcular nuevos saldos
         Integer nuevaCantidad = stockDisponible - movimiento.getCantidad();
-        BigDecimal nuevoTotal = ultimoKardex.getSaldoTotal().subtract(costoTotal);
+        BigDecimal saldoTotalAnterior = ultimoKardex != null ? ultimoKardex.getSaldoTotal() : BigDecimal.ZERO;
+        BigDecimal nuevoTotal = saldoTotalAnterior.subtract(costoTotal);
         BigDecimal nuevoCostoUnitario = nuevaCantidad > 0 
                 ? nuevoTotal.divide(BigDecimal.valueOf(nuevaCantidad), 2, RoundingMode.HALF_UP)
                 : BigDecimal.ZERO;
@@ -150,7 +151,7 @@ public class MovimientoServiceImpl implements MovimientoService {
         kardexRepository.save(kardex);
     }
 
-    protected BigDecimal calcularCostoSalida(List<Kardex> entradas, Integer cantidadSolicitada, boolean fifo) {
+    public BigDecimal calcularCostoSalida(List<Kardex> entradas, Integer cantidadSolicitada, boolean fifo) {
         BigDecimal costoTotal = BigDecimal.ZERO;
         Integer cantidadRestante = cantidadSolicitada;
 
