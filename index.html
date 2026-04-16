@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gantt Vision - Table Format</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <!-- ExcelJS & FileSaver for drawing actual cell-diagram graphics over XLSX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Sidebar for Inputs -->
@@ -17,34 +22,53 @@
                 <h1>Gantt<span class="highlight">Vision</span></h1>
                 <p>Formato de Tabla Avanzado</p>
             </div>
-            
+
             <div class="input-section">
                 <label for="excel-data">Pega desde Excel (Nombre, Inicio, Fin, % Plan., % Real)</label>
-                <textarea id="excel-data" placeholder="Entregable 1&#9;01/01/26&#9;31/01/26&#9;50%&#9;80%&#10;  Fase 1.1&#9;01/01/26&#9;15/01/26&#9;100%&#9;100%&#10;Entregable 2&#9;15/01/26&#9;28/02/26&#9;20&#9;30"></textarea>
+                <div class="input-table-container">
+                    <table class="data-input-table">
+                        <thead>
+                            <tr>
+                                <th>Actividad</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>% Plan</th>
+                                <th>% Real</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="input-tbody">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
+                <button id="add-row-btn"
+                    style="background:#f1f5f9; color:#475569; margin-bottom: 0.2rem; border:1px solid #cbd5e1; font-weight:600; box-shadow:none;"
+                    title="Añadir una fila vacía al final">+ Añadir Fila</button>
                 <div class="action-buttons">
                     <button id="generate-btn">Generar Gráfico</button>
-                    <button id="fullscreen-btn" style="display:none;" title="Ver Completo">🔲 Pantalla</button>
-                    <button id="export-excel-btn" style="display:none; background: #2563eb;" title="Exportar a Excel">📥 Excel</button>
+                    <button id="fullscreen-btn" style="display:none;" title="Ver Completo">🔲 Ver en Pantalla
+                        Completa</button>
                 </div>
             </div>
         </aside>
 
         <!-- Main Chart Area -->
         <main class="gantt-main" id="gantt-wrapper">
-            
+
             <!-- Leyenda superior -->
             <div class="legend-card top-legend" id="main-legend" style="display: none;">
-                 <h3 style="margin:0 1rem 0 0; display:inline;">Leyenda:</h3>
-                 <div class="legend-item" style="display:inline-flex; align-items:center;">
-                     <div class="legend-bar-sample planned-sample"></div>
-                     <span class="label">% Avance Planificado</span>
-                 </div>
-                 <div class="legend-item" style="display:inline-flex; align-items:center; margin-left: 1rem;">
-                     <div class="legend-bar-sample actual-sample"></div>
-                     <span class="label">% Avance Real</span>
-                 </div>
+                <h3 style="margin:0 1rem 0 0; display:inline;">Leyenda:</h3>
+                <div class="legend-item" style="display:inline-flex; align-items:center;">
+                    <div class="legend-bar-sample planned-sample"></div>
+                    <span class="label">% Avance Planificado</span>
+                </div>
+                <div class="legend-item" style="display:inline-flex; align-items:center; margin-left: 1rem;">
+                    <div class="legend-bar-sample actual-sample"></div>
+                    <span class="label">% Avance Real</span>
+                </div>
             </div>
-            
+
             <div class="empty-state" id="empty-state">
                 <div class="empty-icon">📊</div>
                 <h2>Sin datos para mostrar</h2>
@@ -72,4 +96,5 @@
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>

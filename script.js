@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullScreenBtn = document.getElementById('fullscreen-btn');
     const exportExcelBtn = document.getElementById('export-excel-btn');
     const ganttWrapper = document.getElementById('gantt-wrapper');
-    const textArea = document.getElementById('excel-data');
+    const inputTbody = document.getElementById('input-tbody');
     const emptyState = document.getElementById('empty-state');
     const tableWrapper = document.getElementById('table-wrapper');
     const timelineHeader = document.getElementById('timeline-header');
@@ -48,12 +48,68 @@ document.addEventListener('DOMContentLoaded', () => {
         return result;
     }
 
-    // Load cached data naturally
+    function populateTable(textStr) {
+        if (!textStr) return;
+        const rows = textStr.split('\n');
+        let html = '';
+        for(let r of rows) {
+            if(!r.trim() && r === rows[rows.length-1]) continue;
+            let cells = r.split('\t');
+            while(cells.length < 5) cells.push('');
+            html += '<tr>' + cells.slice(0, 5).map(c => `<td contenteditable="true">${c}</td>`).join('') + '<td class="col-delete"><button class="del-row-btn" title="Eliminar fila">✕</button></td></tr>';
+        }
+        inputTbody.innerHTML = html;
+    }
+
+    function ensureEmptyRows() {
+        if (inputTbody.children.length === 0) {
+            let html = '';
+            for(let i=0; i<15; i++) {
+                html += '<tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td class="col-delete"><button class="del-row-btn" title="Eliminar fila">✕</button></td></tr>';
+            }
+            inputTbody.innerHTML = html;
+        }
+    }
+
     const savedData = localStorage.getItem('ganttVisionData');
-    if (savedData) textArea.value = savedData;
+    if (savedData) populateTable(savedData);
+    ensureEmptyRows();
+
+    document.querySelector('.data-input-table').addEventListener('paste', (e) => {
+        let text = (e.clipboardData || window.clipboardData).getData('text');
+        
+        // Let's only handle the paste event default-override if it looks like a multi-column or multi-row excel payload.
+        // Otherwise it could be a single cell replacement.
+        if (text.includes('\t') || text.includes('\n')) {
+             e.preventDefault();
+             populateTable(text);
+        }
+    });
+
+    const addRowBtn = document.getElementById('add-row-btn');
+    if(addRowBtn) {
+        addRowBtn.addEventListener('click', () => {
+             inputTbody.insertAdjacentHTML('beforeend', '<tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td class="col-delete"><button class="del-row-btn" title="Eliminar fila">✕</button></td></tr>');
+        });
+    }
+
+    inputTbody.addEventListener('click', (e) => {
+        if (e.target.classList.contains('del-row-btn')) {
+            e.target.closest('tr').remove();
+            if (inputTbody.children.length === 0) ensureEmptyRows();
+        }
+    });
 
     generateBtn.addEventListener('click', () => {
-        const text = textArea.value;
+        let textArr = [];
+        inputTbody.querySelectorAll('tr').forEach(tr => {
+            let cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText || td.textContent);
+            if (cells.some(c => c.trim() !== '')) {
+                textArr.push(cells.join('\t'));
+            }
+        });
+        const text = textArr.join('\n');
+        
         if (!text.trim()) return;
 
         const rows = text.split('\n');
@@ -117,6 +173,17 @@ document.addEventListener('DOMContentLoaded', () => {
              importantDatesSet.add(new Date(del.start.getFullYear(), del.start.getMonth(), del.start.getDate(), 0, 0, 0).getTime());
              importantDatesSet.add(new Date(del.end.getFullYear(), del.end.getMonth(), del.end.getDate(), 0, 0, 0).getTime());
         });
+        
+        // Agregar fechas intermedias cada 15 días para mejorar la visualización en los espacios vacíos
+        if (minDate && maxDate) {
+            let curr = new Date(minDate);
+            while (curr <= maxDate) {
+                importantDatesSet.add(curr.getTime());
+                curr = addDays(curr, 15);
+            }
+            importantDatesSet.add(maxDate.getTime());
+        }
+
         const importantDates = Array.from(importantDatesSet).sort((a, b) => a - b);
 
         // Gap Compression Calculator
@@ -198,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const absoluteLeftPx = virtualLeft * dynamicDayWidth;
 
             // Only render marker AND line if we have a safe clearing gap
-            if (absoluteLeftPx - lastLeftPx > 36) {
+            if (absoluteLeftPx - lastLeftPx > 65) {
                 htmlTimelineHeader += `
                    <div class="date-marker" style="left: calc(${PADDING_X}px + var(--day-width) * ${virtualLeft});">${dateStr}</div>
                    <div class="date-line" style="left: calc(${PADDING_X}px + var(--day-width) * ${virtualLeft});"></div>
