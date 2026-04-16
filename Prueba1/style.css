@@ -1,0 +1,227 @@
+:root {
+    --bg-color: #ffffff;
+    --panel-bg: #f8fafc;
+    --border-color: #cbd5e1;
+    --border-light: #e2e8f0;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --primary: #4f46e5;
+    
+    /* Image Colors */
+    --planned-color: #a4d08b; /* Verde similar a Excel */
+    --actual-color: #ffbf00;  /* Amarillo similar a Excel */
+    
+    --font-family: 'Inter', sans-serif;
+    --day-width: 8px; /* Variable para calcular el left width y ancho px base de dia */
+    --row-height: 38px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-family);
+    overflow: hidden;
+    height: 100vh;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 320px;
+    background: var(--panel-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    z-index: 20;
+}
+
+.branding h1 { font-size: 1.5rem; font-weight: 800; }
+.branding .highlight { color: var(--primary); }
+.branding p { color: var(--text-muted); font-size: 0.8rem; }
+
+.input-section { display: flex; flex-direction: column; gap: 1rem; flex: 1; }
+.input-section label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+textarea { width: 100%; flex: 1; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-family: monospace; font-size: 0.8rem; resize: none; outline: none; white-space: pre; overflow-wrap: normal; overflow-x: auto; }
+textarea:focus { border-color: var(--primary); }
+
+.action-buttons { display: flex; gap: 0.5rem; }
+button { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0.75rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; flex: 1; }
+button:hover { opacity: 0.9; }
+#fullscreen-btn { background: #10b981; }
+
+.legend-card { padding: 0.75rem 1.5rem; background: white; white-space: nowrap; }
+.legend-card h3 { font-size: 0.85rem; color: var(--text-muted); }
+.legend-item { gap: 0.5rem; font-size: 0.8rem; }
+.legend-bar-sample { width: 30px; height: 14px; }
+.planned-sample { background: var(--planned-color); }
+.actual-sample { background: var(--actual-color); }
+
+.top-legend {
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    flex-shrink: 0;
+}
+
+/* Main Area */
+.gantt-main {
+    flex: 1;
+    position: relative;
+    background: var(--bg-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.gantt-main:fullscreen {
+    padding: 1rem;
+    background: white;
+}
+
+.empty-state {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
+
+/* Table Wrapper for simultaneous scroll */
+.table-wrapper {
+    flex: 1;
+    overflow: auto;
+    background: white;
+}
+
+.gantt-table {
+    border-collapse: separate; /* Required for sticky */
+    border-spacing: 0;
+    width: 100%;
+}
+
+.gantt-table th, .gantt-table td {
+    padding: 0 0.5rem;
+    height: var(--row-height);
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    white-space: nowrap;
+    position: relative;
+}
+
+.gantt-table thead th {
+    height: 45px;
+    background: #f8fafc;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-main);
+    top: 0;
+    position: sticky;
+    z-index: 10;
+}
+
+/* Col 1 Sticky */
+.gantt-table .col-main {
+    width: 100px;
+    min-width: 100px;
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 5;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    vertical-align: middle;
+    border-bottom: 2px solid #94a3b8; /* Group horizontal separator */
+}
+.gantt-table thead .col-main { z-index: 15; background: #f8fafc; }
+
+/* Timeline Col */
+.gantt-table .col-timeline {
+    position: relative; /* Allows position absolute markers */
+    width: 100%; /* Adapts fully to the requested compression! */
+    border-right: none;
+    z-index: 1; /* Under sticky cells */
+    padding: 0; /* Remove padding entirely to match 0-offset absolute bounds */
+}
+
+/* We style the TH timeline cell specially */
+#timeline-header {
+    padding: 0;
+    overflow: visible;
+}
+
+.date-marker {
+    position: absolute;
+    bottom: 5px;
+    transform: translateX(-50%);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+.date-line {
+    position: absolute;
+    top: 45px; /* height of header */
+    height: 9999px; /* Huge height to act as grid line behind data */
+    width: 0px;
+    border-left: 1px dashed #e2e8f0; /* Gentle light gray intersecting dots */
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Removing hover on everything for a cleaner print layout! */
+
+/* Bar Container */
+.chart-cell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.bar-bg-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 24px;
+    background: #e2e8f0; /* Default Gray to show entire duration bounds */
+    border-radius: 4px; /* Slight softening if desired, or 0 */
+}
+
+.bar-fill {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.planned-style .bar-fill { background: var(--planned-color); }
+.actual-style .bar-fill { background: var(--actual-color); }
+
+.percent-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #0f172a; /* Dark for contrast against filling */
+    z-index: 3;
+}
