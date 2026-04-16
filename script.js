@@ -71,8 +71,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const savedData = localStorage.getItem('ganttVisionData');
-    if (savedData) populateTable(savedData);
+    const hashData = window.location.hash.slice(1);
+    let initialData = null;
+    
+    if (hashData) {
+        try {
+            initialData = decodeURIComponent(atob(hashData));
+            if (!initialData.includes('\t')) initialData = null; // Basic format verification
+        } catch(e) {
+            console.error("Link inválido");
+        }
+    }
+    
+    if (!initialData) {
+        initialData = localStorage.getItem('ganttVisionData');
+    }
+    
+    if (initialData) populateTable(initialData);
     ensureEmptyRows();
 
     document.querySelector('.data-input-table').addEventListener('paste', (e) => {
@@ -167,24 +182,28 @@ document.addEventListener('DOMContentLoaded', () => {
         
         chartDeliverablesCache = deliverables;
 
-        const importantDatesSet = new Set();
+        const criticalDatesSet = new Set();
         deliverables.forEach(del => {
-             // Saving precise local integer timestamps
-             importantDatesSet.add(new Date(del.start.getFullYear(), del.start.getMonth(), del.start.getDate(), 0, 0, 0).getTime());
-             importantDatesSet.add(new Date(del.end.getFullYear(), del.end.getMonth(), del.end.getDate(), 0, 0, 0).getTime());
+             criticalDatesSet.add(new Date(del.start.getFullYear(), del.start.getMonth(), del.start.getDate(), 0, 0, 0).getTime());
+             criticalDatesSet.add(new Date(del.end.getFullYear(), del.end.getMonth(), del.end.getDate(), 0, 0, 0).getTime());
+             del.phases.forEach(ph => {
+                 criticalDatesSet.add(new Date(ph.start.getFullYear(), ph.start.getMonth(), ph.start.getDate(), 0, 0, 0).getTime());
+                 criticalDatesSet.add(new Date(ph.end.getFullYear(), ph.end.getMonth(), ph.end.getDate(), 0, 0, 0).getTime());
+             });
         });
         
-        // Agregar fechas intermedias cada 15 días para mejorar la visualización en los espacios vacíos
+        const fillerDatesSet = new Set();
         if (minDate && maxDate) {
             let curr = new Date(minDate);
             while (curr <= maxDate) {
-                importantDatesSet.add(curr.getTime());
+                fillerDatesSet.add(curr.getTime());
                 curr = addDays(curr, 15);
             }
-            importantDatesSet.add(maxDate.getTime());
+            fillerDatesSet.add(maxDate.getTime());
         }
 
-        const importantDates = Array.from(importantDatesSet).sort((a, b) => a - b);
+        const criticalDates = Array.from(criticalDatesSet).sort((a, b) => a - b);
+        const fillerDates = Array.from(fillerDatesSet).sort((a, b) => a - b);
 
         // Gap Compression Calculator
         let intervals = [];
@@ -234,10 +253,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const totalVirtualDays = mapVirtualDays(maxDate.getTime());
 
-        renderGantt(deliverables, minDate, maxDate, importantDates, totalVirtualDays, mapVirtualDays);
+        renderGantt(deliverables, minDate, maxDate, criticalDates, fillerDates, totalVirtualDays, mapVirtualDays);
     });
 
-    function renderGantt(deliverables, minDate, maxDate, importantDates, totalVisualDays, mapVirtualDays) {
+    function renderGantt(deliverables, minDate, maxDate, criticalDates, fillerDates, totalVisualDays, mapVirtualDays) {
         
         emptyState.style.display = 'none';
         
@@ -256,23 +275,41 @@ document.addEventListener('DOMContentLoaded', () => {
         timelineHeader.style.minWidth = `calc(${PADDING_X * 2}px + var(--day-width) * ${totalVisualDays})`;
         
         let htmlTimelineHeader = '';
-        let lastLeftPx = -9999;
+        let acceptedPx = [];
+        let acceptedPlacements = []; 
         
-        importantDates.forEach((ts) => {
-            const d = new Date(ts);
-            const dateStr = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+        const attemptPlacement = (ts) => {
             const virtualLeft = mapVirtualDays(ts);
             const absoluteLeftPx = virtualLeft * dynamicDayWidth;
-
-            // Only render marker AND line if we have a safe clearing gap
-            if (absoluteLeftPx - lastLeftPx > 65) {
-                htmlTimelineHeader += `
-                   <div class="date-marker" style="left: calc(${PADDING_X}px + var(--day-width) * ${virtualLeft});">${dateStr}</div>
-                   <div class="date-line" style="left: calc(${PADDING_X}px + var(--day-width) * ${virtualLeft});"></div>
-                `;
-                lastLeftPx = absoluteLeftPx;
+            
+            let conflict = false;
+            for(let px of acceptedPx) {
+                if(Math.abs(absoluteLeftPx - px) < 65) {
+                    conflict = true; break;
+                }
             }
+            if(!conflict) {
+                acceptedPx.push(absoluteLeftPx);
+                acceptedPlacements.push({ts, virtualLeft});
+            }
+        };
+
+        // 1. Prioritize real inputs
+        criticalDates.forEach(ts => attemptPlacement(ts));
+        // 2. Fill spaces with safe distance from reals
+        fillerDates.forEach(ts => attemptPlacement(ts));
+
+        acceptedPlacements.sort((a,b) => a.ts - b.ts);
+        
+        acceptedPlacements.forEach(item => {
+            const d = new Date(item.ts);
+            const dateStr = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+            htmlTimelineHeader += `
+               <div class="date-marker" style="left: calc(${PADDING_X}px + var(--day-width) * ${item.virtualLeft});">${dateStr}</div>
+               <div class="date-line" style="left: calc(${PADDING_X}px + var(--day-width) * ${item.virtualLeft});"></div>
+            `;
         });
+        
         timelineHeader.innerHTML = htmlTimelineHeader;
 
         let htmlRows = '';
@@ -341,7 +378,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ganttTbody.innerHTML = htmlRows;
         
         if(fullScreenBtn) fullScreenBtn.style.display = 'block';
-        if(exportExcelBtn) exportExcelBtn.style.display = 'block';
+        
+        const shareLinkBtn = document.getElementById('share-link-btn');
+        const exportImgBtn = document.getElementById('export-img-btn');
+        if(shareLinkBtn) shareLinkBtn.style.display = 'block';
+        if(exportImgBtn) exportImgBtn.style.display = 'block';
     }
 
     if(fullScreenBtn) {
@@ -353,84 +394,72 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
-    if(exportExcelBtn) {
-        exportExcelBtn.addEventListener('click', async () => {
-            if (!window.ExcelJS) return alert("Cargando modulo de impresion de grafico...");
-            if (chartDeliverablesCache.length === 0) return alert("No hay datos para exportar.");
-            
-            const formatDateStr = (d) => `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
-            
-            const wb = new ExcelJS.Workbook();
-            const ws = wb.addWorksheet("Diagrama_Gantt");
-            
-            // Build Matrix Base
-            const totalDiagramDays = getDaysBetween(minDate, maxDate);
-            
-            const headers = ["Actividad / Fases", "Inicio", "Fin", "% Planificado", "% Real"];
-            for (let d = 0; d <= totalDiagramDays; d++) {
-                const tick = addDays(minDate, d);
-                headers.push(`${tick.getDate()}/${tick.getMonth()+1}`);
-            }
-            
-            const headerRow = ws.addRow(headers);
-            headerRow.font = { bold: true };
-            
-            ws.getColumn(1).width = 25;
-            ws.getColumn(2).width = 12;
-            ws.getColumn(3).width = 12;
-            ws.getColumn(4).width = 15;
-            ws.getColumn(5).width = 15;
-            
-            for (let i = 0; i <= totalDiagramDays; i++) {
-               ws.getColumn(6 + i).width = 2.5; // Strict small cells imitating graphic
-            }
-            
-            // Plot logic mapping to colored sheet
-            chartDeliverablesCache.forEach(del => {
-                const addRowData = (item, isActual, phasePrefix) => {
-                    const rowText = [
-                        (phasePrefix || '') + item.name + (isActual ? ' (Real)' : ' (Plan)'), 
-                        formatDateStr(item.start), formatDateStr(item.end), 
-                        isActual ? '' : item.planned, 
-                        isActual ? item.actual : ''
-                    ];
-                    // Append blank columns to right array boundary
-                    for(let i=0; i<=totalDiagramDays; i++) rowText.push("");
-                    
-                    const addedRw = ws.addRow(rowText);
-                    
-                    const leftOffset = getDaysBetween(minDate, item.start);
-                    const durLength = Math.max(1, getDaysBetween(item.start, item.end));
-                    
-                    // Draw cell chart natively via styles
-                    const colorFill = isActual ? 'FFFFC000' : 'FF92D050'; // Orange & Green
-                    const valueLimit = isActual ? item.actual : item.planned;
-                    
-                    for(let d = 0; d <= durLength; d++) {
-                        const targetCell = addedRw.getCell(6 + leftOffset + d);
-                        const progressPercent = (d / durLength) * 100;
-                        
-                        if (progressPercent <= valueLimit && valueLimit > 0) {
-                            targetCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: colorFill } };
-                        } else {
-                            targetCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD9D9D9' } }; // Light gray
-                        }
-                    }
-                };
 
-                addRowData(del, false, '');
-                addRowData(del, true, '');
-                
-                del.phases.forEach(ph => {
-                    addRowData(ph, false, '   - ');
-                    addRowData(ph, true, '   - ');
-                });
+    const shareLinkBtn = document.getElementById('share-link-btn');
+    if(shareLinkBtn) {
+        shareLinkBtn.addEventListener('click', () => {
+            let textArr = [];
+            inputTbody.querySelectorAll('tr').forEach(tr => {
+                let cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText || td.textContent);
+                if (cells.some(c => c.trim() !== '')) {
+                    textArr.push(cells.slice(0, 5).join('\t'));
+                }
             });
+            const text = textArr.join('\n');
+            if(!text.trim()) return alert("No hay datos cargados para compartir.");
             
-            const buffer = await wb.xlsx.writeBuffer();
-            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), "Gantt_Vision_Export.xlsx");
+            const encoded = btoa(encodeURIComponent(text));
+            const newUrl = window.location.origin + window.location.pathname + "#" + encoded;
+            
+            navigator.clipboard.writeText(newUrl).then(() => {
+                alert("✅ Enlace copiado al portapapeles. Al abrirlo se cargarán tus datos actuales automáticamente.");
+            }).catch(err => {
+                prompt("Por favor copia manualmente este enlace:", newUrl);
+            });
         });
     }
 
+    const exportImgBtn = document.getElementById('export-img-btn');
+    if(exportImgBtn) {
+        exportImgBtn.addEventListener('click', () => {
+            if (!window.html2canvas) return alert("Cargando motor de renderizado...");
+            
+            const targetElement = document.getElementById('gantt-table');
+            const wrapper = document.getElementById('table-wrapper');
+            
+            const oldScrollLeft = wrapper.scrollLeft;
+            const oldScrollTop = wrapper.scrollTop;
+            wrapper.scrollLeft = 0;
+            wrapper.scrollTop = 0;
+            
+            const stickyElements = targetElement.querySelectorAll('.col-main, th');
+            stickyElements.forEach(el => {
+                el._origPos = el.style.position;
+                el.style.setProperty('position', 'relative', 'important');
+            });
+            
+            html2canvas(targetElement, {
+                scale: 3, 
+                backgroundColor: "#ffffff",
+                useCORS: true
+            }).then(canvas => {
+                stickyElements.forEach(el => {
+                    el.style.position = el._origPos || '';
+                });
+                wrapper.scrollLeft = oldScrollLeft;
+                wrapper.scrollTop = oldScrollTop;
+                
+                const link = document.createElement('a');
+                link.download = 'Gantt_Alta_Resolucion.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            }).catch(err => {
+                 stickyElements.forEach(el => {
+                     el.style.position = el._origPos || '';
+                 });
+                 console.error(err);
+                 alert("Ocurrió un error al intentar exportar la imagen.");
+            });
+        });
+    }
 });
