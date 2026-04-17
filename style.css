@@ -1,8 +1,8 @@
 :root {
     --bg-color: #ffffff;
     --panel-bg: #f8fafc;
-    --border-color: var(--border-color);
-    --border-light: var(--border-light);
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
     --text-main: #1e293b;
     --text-muted: #64748b;
     --primary: #2563eb;

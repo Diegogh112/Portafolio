@@ -158,9 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!rawLine.trim()) continue;
 
             const cols = rawLine.split('\t');
-            if (cols.length < 5) continue;
+            if (cols.length < 1) continue;
 
             const name = cols[0].trim();
+            if (!name) continue;
+
             const startStr = cols[1];
             const endStr = cols[2];
 
@@ -215,18 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        const fillerDatesSet = new Set();
-        if (minDate && maxDate) {
-            let curr = new Date(minDate);
-            while (curr <= maxDate) {
-                fillerDatesSet.add(curr.getTime());
-                curr = addDays(curr, 15);
-            }
-            fillerDatesSet.add(maxDate.getTime());
-        }
+        // Asegurar que siempre intentamos poner el min y max como críticos
+        if (minDate) criticalDatesSet.add(minDate.getTime());
+        if (maxDate) criticalDatesSet.add(maxDate.getTime());
 
         const criticalDates = Array.from(criticalDatesSet).sort((a, b) => a - b);
-        const fillerDates = Array.from(fillerDatesSet).sort((a, b) => a - b);
 
         // Gap Compression Calculator
         let intervals = [];
@@ -263,22 +258,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const mapVirtualDays = (ts) => {
-            let realDays = Math.round((ts - minDate.getTime()) / DAY_MS);
-            let shift = 0;
+            let realDaysTotal = (ts - minDate.getTime()) / DAY_MS;
+            let totalShift = 0;
             for (const g of gaps) {
                 if (ts >= g.e) {
-                    shift += (g.realDays - g.visualDays);
+                    // Si la fecha es posterior al gap, restamos todo el exceso del gap
+                    totalShift += (g.realDays - g.visualDays);
                 } else if (ts > g.s && ts < g.e) {
-                    const daysIntoGap = Math.round((ts - g.s) / DAY_MS);
-                    shift += (daysIntoGap - Math.min(daysIntoGap, g.visualDays));
+                    // Si la fecha cae DENTRO del gap, aplicamos una compresión lineal para evitar amontonamientos
+                    const daysIntoGap = (ts - g.s) / DAY_MS;
+                    const compressionFactor = 1 - (g.visualDays / g.realDays);
+                    totalShift += daysIntoGap * compressionFactor;
+                    break; // No procesamos más gaps ya que ts está dentro de este
                 }
             }
-            return Math.max(0, realDays - shift);
+            return Math.max(0, realDaysTotal - totalShift);
         };
 
         const totalVirtualDays = mapVirtualDays(maxDate.getTime());
 
-        renderGantt(deliverables, minDate, maxDate, criticalDates, fillerDates, totalVirtualDays, mapVirtualDays);
+        renderGantt(deliverables, minDate, maxDate, criticalDates, null, totalVirtualDays, mapVirtualDays);
     });
 
     function renderGantt(deliverables, minDate, maxDate, criticalDates, fillerDates, totalVisualDays, mapVirtualDays) {
@@ -308,7 +307,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const absoluteLeftPx = virtualLeft * dynamicDayWidth;
 
             let conflict = false;
-            const threshold = 55; // Threshold modificado a 55 para dejar un leve margen sin cortar demasiadas fechas
+            // Umbral de 75px para evitar que DD/MM/YYYY se solape visualmente
+            const threshold = 75; 
             for (let px of acceptedPx) {
                 if (Math.abs(absoluteLeftPx - px) < threshold) {
                     conflict = true; break;
@@ -317,13 +317,40 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!conflict) {
                 acceptedPx.push(absoluteLeftPx);
                 acceptedPlacements.push({ ts, virtualLeft });
+                return true;
             }
+            return false;
         };
 
-        // 1. Prioritize real inputs
+        // 1. Priorizar fechas críticas (inicio/fin)
         criticalDates.forEach(ts => attemptPlacement(ts, true));
-        // 2. Fill spaces with safe distance from reals
-        fillerDates.forEach(ts => attemptPlacement(ts, false));
+        
+        // Ordenar las aceptadas para evaluar huecos visuales
+        acceptedPlacements.sort((a, b) => a.ts - b.ts);
+
+        // 2. Relleno dinámico: solo si hay huecos visuales grandes (> 250px)
+        if (acceptedPlacements.length > 0) {
+            let i = 0;
+            while (i < acceptedPlacements.length - 1) {
+                const current = acceptedPlacements[i];
+                const next = acceptedPlacements[i+1];
+                const currentPx = current.virtualLeft * dynamicDayWidth;
+                const nextPx = next.virtualLeft * dynamicDayWidth;
+                
+                // Si el hueco es muy grande, intentamos meter una fecha en medio para que no se vea vacío
+                if (nextPx - currentPx > 250) {
+                    const midTs = (current.ts + next.ts) / 2;
+                    const midDate = new Date(midTs);
+                    midDate.setDate(1); // Normalizar a inicio de mes
+                    
+                    if (attemptPlacement(midDate.getTime(), false)) {
+                        acceptedPlacements.sort((a, b) => a.ts - b.ts);
+                        continue; // Re-evaluar el nuevo hueco
+                    }
+                }
+                i++;
+            }
+        }
 
         acceptedPlacements.sort((a, b) => a.ts - b.ts);
 
@@ -339,6 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
         timelineHeader.innerHTML = htmlTimelineHeader;
 
         function drawChartCell(item, type, contextLabel, isPhase, topOffset = null) {
+            if (!item.start || !item.end) return '';
+
             const leftDays = mapVirtualDays(item.start.getTime());
             const endDays = mapVirtualDays(item.end.getTime());
             const durationWidthFixed = Math.max(0.01, endDays - leftDays);
@@ -370,14 +399,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 barFillHtml = ''; 
             } else if (isPhase && type === 'planned') {
                 styleClass = '';
-                customPhaseBg = `height: 16px; border: 1px dashed var(--phase-planned-border); border-top: none; box-sizing: border-box; background: transparent; border-radius: 0; position: relative;`;
+                customPhaseBg = `height: 16px; border: 1px dashed var(--phase-planned-border); border-top: none; box-sizing: border-box; background: var(--border-color); border-radius: 0; position: relative;`;
                 
                 barFillHtml = `<div class="bar-fill" style="width: ${valueDisplay}%; height: 100%; background: var(--planned-color); border-radius: 0;">
                        <span class="percent-label" style="position:absolute; left: 6px; top: 50%; transform: translateY(-50%); font-size: 0.65rem;">${valueDisplay}% Plan</span>
                    </div>`;
             } else if (isPhase && type === 'actual') {
                 styleClass = ''; 
-                customPhaseBg = `background: transparent; border: 1px dashed var(--phase-planned-border); border-top: none; box-sizing: border-box; height: 16px; position: relative; border-radius: 0 0 4px 4px; overflow: hidden;`;
+                customPhaseBg = `background: var(--border-color); border: 1px dashed var(--phase-planned-border); border-top: none; box-sizing: border-box; height: 16px; position: relative; border-radius: 0 0 4px 4px; overflow: hidden;`;
                 barFillHtml = `<div class="bar-fill" style="width: ${valueDisplay}%; height: 100%; background: var(--phase-actual-fill); border-radius: 0;">
                     <span class="percent-label" style="position:absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #ef4444; font-size: 0.65rem;">${valueDisplay}% Real</span>
                 </div>`;
@@ -414,11 +443,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.70rem; color: var(--text-main); font-weight: 700; border-bottom: 1px dashed var(--phase-planned-border); position: relative; z-index: 5;">
                     ${phase.name}
                 </div>
-                <div style="height: 18px; position: relative; background: transparent; border-bottom: 1px dashed var(--phase-planned-border);">
+                <div style="height: 18px; position: relative; background: var(--border-color); border-bottom: 1px dashed var(--phase-planned-border);">
                     <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${phase.planned}%; background: var(--planned-color); opacity: 0.9;"></div>
                     <span style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; color: var(--text-main); font-weight: 700; z-index: 2;">${phase.planned}% Plan</span>
                 </div>
-                <div style="height: 18px; position: relative; background: transparent;">
+                <div style="height: 18px; position: relative; background: var(--border-color);">
                     <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${phase.actual}%; background: var(--phase-actual-fill); opacity: 0.9;"></div>
                     <span style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; color: #ef4444; font-weight: 700; z-index: 2;">${phase.actual}% Real</span>
                 </div>
