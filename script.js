@@ -307,8 +307,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const absoluteLeftPx = virtualLeft * dynamicDayWidth;
 
             let conflict = false;
-            // Umbral de 75px para evitar que DD/MM/YYYY se solape visualmente
-            const threshold = 75; 
+            // Umbral de 70px para permitir más fechas pero sin solapamiento real
+            const threshold = 70; 
             for (let px of acceptedPx) {
                 if (Math.abs(absoluteLeftPx - px) < threshold) {
                     conflict = true; break;
@@ -328,28 +328,40 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ordenar las aceptadas para evaluar huecos visuales
         acceptedPlacements.sort((a, b) => a.ts - b.ts);
 
-        // 2. Relleno dinámico: solo si hay huecos visuales grandes (> 250px)
-        if (acceptedPlacements.length > 0) {
-            let i = 0;
-            while (i < acceptedPlacements.length - 1) {
-                const current = acceptedPlacements[i];
-                const next = acceptedPlacements[i+1];
-                const currentPx = current.virtualLeft * dynamicDayWidth;
-                const nextPx = next.virtualLeft * dynamicDayWidth;
-                
-                // Si el hueco es muy grande, intentamos meter una fecha en medio para que no se vea vacío
-                if (nextPx - currentPx > 250) {
-                    const midTs = (current.ts + next.ts) / 2;
-                    const midDate = new Date(midTs);
-                    midDate.setDate(1); // Normalizar a inicio de mes
-                    
-                    if (attemptPlacement(midDate.getTime(), false)) {
-                        acceptedPlacements.sort((a, b) => a.ts - b.ts);
-                        continue; // Re-evaluar el nuevo hueco
-                    }
+        // 2. Relleno dinámico e inteligente: se adapta a la escala (años, meses, días)
+        const totalDays = Math.round((maxDate - minDate) / DAY_MS);
+        let step = 1; // Por defecto 1 día
+        
+        if (totalDays > 365 * 2) step = 30 * 3; // Si dura más de 2 años, saltos de 3 meses
+        else if (totalDays > 365) step = 30;    // Si dura más de 1 año, saltos de 1 mes
+        else if (totalDays > 60) step = 15;     // Si dura más de 2 meses, saltos de 15 días
+        else if (totalDays > 30) step = 7;      // Si dura más de 1 mes, saltos de 7 días
+        else step = 2;                         // Proyectos cortos, saltos de 2 días
+
+        // Generar posibles fechas de relleno
+        let curr = new Date(minDate);
+        while (curr <= maxDate) {
+            attemptPlacement(curr.getTime(), false);
+            curr = addDays(curr, step);
+        }
+
+        // 3. Relleno de emergencia para huecos visuales residuales (> 120px)
+        acceptedPlacements.sort((a, b) => a.ts - b.ts);
+        let i = 0;
+        while (i < acceptedPlacements.length - 1) {
+            const current = acceptedPlacements[i];
+            const next = acceptedPlacements[i+1];
+            const currentPx = current.virtualLeft * dynamicDayWidth;
+            const nextPx = next.virtualLeft * dynamicDayWidth;
+            
+            if (nextPx - currentPx > 120) {
+                const midTs = (current.ts + next.ts) / 2;
+                if (attemptPlacement(midTs, false)) {
+                    acceptedPlacements.sort((a, b) => a.ts - b.ts);
+                    continue; 
                 }
-                i++;
             }
+            i++;
         }
 
         acceptedPlacements.sort((a, b) => a.ts - b.ts);
