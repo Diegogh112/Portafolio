@@ -1,20 +1,77 @@
 :root {
     --bg-color: #ffffff;
     --panel-bg: #f8fafc;
-    --border-color: #e2e8f0;
-    --border-light: #f1f5f9;
+    --border-color: var(--border-color);
+    --border-light: var(--border-light);
     --text-main: #1e293b;
     --text-muted: #64748b;
     --primary: #2563eb;
     --primary-hover: #1d4ed8;
     
-    /* Colores profesionales como en la imagen, sin degradados */
-    --planned-color: #a4d08b; /* Verde pálido */
-    --actual-color: #ffbf00;  /* Amarillo/Ámbar sólido */
+    --planned-color: #a4d08b;
+    --actual-color: #ffbf00;
     
     --font-family: 'Outfit', -apple-system, sans-serif;
     --day-width: 8px;
-    --row-height: 48px; 
+    --row-height: 48px;
+
+    --phase-planned-bg: var(--border-color);
+    --phase-dev-bg: #d1d5db;
+    --phase-qa-bg: #e0e7ff;
+    --phase-prod-bg: #cbd5e1;
+    --phase-planned-border: #1e293b;
+    --phase-actual-fill: #0ea5e9;
+    --table-header-bg: #ffffff;
+    --input-table-bg: #ffffff;
+    --input-th-bg: var(--border-light);
+}
+
+[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --panel-bg: #1e293b;
+    --border-color: #334155;
+    --border-light: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    
+    --planned-color: #22c55e;
+    --actual-color: #f59e0b;
+
+    --phase-planned-bg: #334155;
+    --phase-dev-bg: var(--text-muted);
+    --phase-qa-bg: #312e81;
+    --phase-prod-bg: #334155;
+    --phase-planned-border: #94a3b8;
+    --phase-actual-fill: #38bdf8;
+    --table-header-bg: #0f172a;
+    --input-table-bg: #1e293b;
+    --input-th-bg: #0f172a;
+}
+
+[data-theme="vibrant"] {
+    --bg-color: #fffbeb;
+    --panel-bg: #ffedd5;
+    --border-color: #fdba74;
+    --border-light: #ffedd5;
+    --text-main: #431407;
+    --text-muted: #9a3412;
+    --primary: #ea580c;
+    --primary-hover: #c2410c;
+    
+    --planned-color: #f43f5e;
+    --actual-color: #8b5cf6;
+
+    --phase-planned-bg: #fed7aa;
+    --phase-dev-bg: #fcd34d;
+    --phase-qa-bg: #fbcfe8;
+    --phase-prod-bg: #d9f99d;
+    --phase-planned-border: #9a3412;
+    --phase-actual-fill: #10b981;
+    --table-header-bg: #fffbeb;
+    --input-table-bg: #fff7ed;
+    --input-th-bg: #ffedd5;
 }
 
 * {
@@ -53,7 +110,7 @@ body {
 .branding h1 { 
     font-size: 1.6rem; 
     font-weight: 700; 
-    color: #0f172a;
+    color: var(--text-main);
     letter-spacing: -0.02em; 
     margin-bottom: 0.2rem; 
 }
@@ -73,9 +130,9 @@ textarea {
     width: 100%; 
     flex: 1; 
     padding: 1rem; 
-    background: #ffffff; 
+    background: var(--input-table-bg); 
     color: var(--text-main); 
-    border: 1px solid #cbd5e1; 
+    border: 1px solid var(--border-color); 
     border-radius: 6px; 
     font-family: monospace; 
     font-size: 0.85rem; 
@@ -94,9 +151,9 @@ textarea:focus {
 .input-table-container { 
     flex: 1; 
     overflow: auto; 
-    border: 1px solid #cbd5e1; 
+    border: 1px solid var(--border-color); 
     border-radius: 6px; 
-    background: white;
+    background: var(--input-table-bg);
 }
 .data-input-table { 
     width: 100%; 
@@ -104,22 +161,22 @@ textarea:focus {
     font-size: 0.8rem; 
 }
 .data-input-table th { 
-    background: #f1f5f9; 
+    background: var(--input-th-bg); 
     padding: 0.5rem; 
     text-align: left; 
     border-bottom: 1px solid #cbd5e1; 
     position: sticky; top: 0; 
-    color: #475569; 
+    color: var(--text-muted); 
     font-weight: 600; 
 }
 .data-input-table td { 
     padding: 0.4rem; 
-    border-bottom: 1px solid #e2e8f0; 
-    border-right: 1px solid #e2e8f0; 
+    border-bottom: 1px solid var(--border-color); 
+    border-right: 1px solid var(--border-color); 
     min-width: 45px; 
 }
 .data-input-table td:last-child { border-right: none; text-align: center; width: 30px; }
-.data-input-table tbody tr:hover { background-color: #f8fafc; }
+.data-input-table tbody tr:hover { background-color: var(--panel-bg); }
 .col-delete { width: 30px; text-align: center; }
 .del-row-btn {
     background: transparent; color: #ef4444; border: none; font-size: 1rem; width: 20px;
@@ -148,7 +205,7 @@ button:hover { background: var(--primary-hover); }
 
 .legend-card { 
     padding: 0.75rem 1.5rem; 
-    background: #ffffff; 
+    background: var(--bg-color); 
     white-space: nowrap; 
 }
 .legend-card h3 { font-size: 0.9rem; color: var(--text-main); font-weight: 600; }
@@ -163,7 +220,7 @@ button:hover { background: var(--primary-hover); }
     border-radius: 0;
     display: flex;
     align-items: center;
-    background: #f8fafc;
+    background: var(--panel-bg);
     flex-shrink: 0;
 }
 
@@ -195,12 +252,12 @@ button:hover { background: var(--primary-hover); }
 .table-wrapper {
     flex: 1;
     overflow: auto;
-    background: #ffffff;
+    background: var(--bg-color);
     padding-bottom: 1rem;
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-track { background: var(--input-th-bg); }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
@@ -213,15 +270,15 @@ button:hover { background: var(--primary-hover); }
 .gantt-table th, .gantt-table td {
     padding: 0 0.5rem;
     height: var(--row-height);
-    border-bottom: 1px solid #e5e7eb;
-    border-right: 1px solid #f1f5f9; /* Líneas verticales suaves para división de columnas de fondo */
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-light); /* Líneas verticales suaves para división de columnas de fondo */
     white-space: nowrap;
     position: relative;
 }
 
 .gantt-table thead th {
     height: 50px;
-    background: #ffffff;
+    background: var(--bg-color);
     border-bottom: 2px solid var(--border-color);
     font-size: 0.8rem;
     font-weight: 600;
@@ -237,20 +294,20 @@ button:hover { background: var(--primary-hover); }
     min-width: 180px;
     position: sticky;
     left: 0;
-    background: #ffffff;
+    background: var(--bg-color);
     z-index: 5;
     text-align: right;
     padding-right: 1.5rem;
     font-weight: 500;
     font-size: 0.85rem;
     vertical-align: middle;
-    border-bottom: 1px solid #e5e7eb;
-    color: #475569;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
 }
 .gantt-table thead .col-main { 
     z-index: 15; 
     text-align: right; 
-    background: #ffffff; 
+    background: var(--bg-color); 
     border-bottom: 2px solid var(--border-color); 
 }
 
@@ -301,7 +358,7 @@ button:hover { background: var(--primary-hover); }
     top: 50%;
     transform: translateY(-50%);
     height: 24px;
-    background: #e2e8f0; /* Fondo gris para indicar hasta dónde llega la fecha fin */
+    background: var(--border-color); /* Fondo gris para indicar hasta dónde llega la fecha fin */
     border-radius: 2px;
 }
 
@@ -327,4 +384,33 @@ button:hover { background: var(--primary-hover); }
     z-index: 3;
     padding-left: 8px;
     display: block; /* Habilitado nuevamente */
+}
+
+/* Modificadores gráficos basados en la referencia solicitada */
+.phase-actual-custom .bar-fill {
+    background: #0ea5e9 !important; /* Celeste intenso como el progreso de la imagen */
+}
+
+.phase-actual-custom .percent-label {
+    color: #ef4444; /* Texto de porcentaje porcentaje color rojo como en la muestra de la imagen */
+}
+
+.toast-notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #1e293b;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+.toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
 }
