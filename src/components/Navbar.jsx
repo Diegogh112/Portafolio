@@ -10,10 +10,13 @@ const NAV_LINKS = [
   { label: 'Contacto', href: 'contact' },
 ]
 
+// Pre-computed outside the component so the array reference is stable
+const NAV_HREFS = NAV_LINKS.map((l) => l.href)
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const scrolled = useScrollPosition(50)
-  const activeSection = useActiveSection(NAV_LINKS.map((l) => l.href))
+  const activeSection = useActiveSection(NAV_HREFS)
 
   const scrollTo = (id) => {
     const el = document.getElementById(id)

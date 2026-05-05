@@ -50,12 +50,13 @@ export function useScrollPosition(offset = 50) {
  */
 export function useActiveSection(sections) {
   const [activeSection, setActiveSection] = useState('')
+  const sectionsRef = useRef(sections)
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY + 100
 
-      for (const section of sections) {
+      for (const section of sectionsRef.current) {
         const el = document.getElementById(section)
         if (!el) continue
         const { offsetTop, offsetHeight } = el
@@ -69,7 +70,7 @@ export function useActiveSection(sections) {
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [sections])
+  }, []) // stable — sectionsRef never changes
 
   return activeSection
 }
