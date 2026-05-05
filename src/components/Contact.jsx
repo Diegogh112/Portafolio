@@ -130,7 +130,7 @@ export default function Contact() {
                   label="Nombre"
                   name="name"
                   type="text"
-                  placeholder="Tu nombre"
+                  placeholder="Diego Gutierrez"
                   value={form.name}
                   onChange={handleChange}
                   error={errors.name}
