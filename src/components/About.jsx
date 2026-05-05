@@ -1,4 +1,4 @@
-import { aboutDescription, personalInfo, education, certifications } from '../data/portfolio'
+import { aboutDescription, education, certifications, experience } from '../data/portfolio'
 import SectionHeader from './ui/SectionHeader'
 import AnimatedSection from './ui/AnimatedSection'
 
@@ -31,10 +31,10 @@ export default function About() {
 
               {/* Quick facts */}
               <div className="grid grid-cols-2 gap-4 pt-4">
-                <StatCard value="4+" label="Proyectos completados" />
-                <StatCard value="2+" label="Años de experiencia" />
-                <StatCard value="10+" label="Tecnologías dominadas" />
-                <StatCard value="3" label="Certificaciones" />
+                <StatCard value="5+" label="Proyectos en GitHub" />
+                <StatCard value="2" label="Empresas (prácticas)" />
+                <StatCard value="15+" label="Tecnologías dominadas" />
+                <StatCard value="7" label="Certificaciones" />
               </div>
             </div>
           </AnimatedSection>
@@ -42,6 +42,36 @@ export default function About() {
           {/* Right — Education & Certifications */}
           <AnimatedSection animation="slide-right" delay={200}>
             <div className="space-y-6">
+              {/* Experience */}
+              <div>
+                <h3 className="text-white font-semibold text-lg mb-4 flex items-center gap-2">
+                  <BriefcaseIcon className="w-5 h-5 text-emerald-400" />
+                  Experiencia
+                </h3>
+                <div className="space-y-3">
+                  {experience.map((exp, i) => (
+                    <div key={i} className="card">
+                      <div className="flex items-start justify-between gap-4 mb-2">
+                        <div>
+                          <p className="text-white font-medium">{exp.role}</p>
+                          <p className="text-emerald-400 text-sm">{exp.company}</p>
+                        </div>
+                        <span className="text-slate-500 text-xs font-mono whitespace-nowrap">
+                          {exp.period}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {exp.technologies.map((tech) => (
+                          <span key={tech} className="px-2 py-0.5 text-xs rounded bg-slate-700/60 text-slate-300 border border-slate-600/50">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Education */}
               <div>
                 <h3 className="text-white font-semibold text-lg mb-4 flex items-center gap-2">
@@ -130,6 +160,14 @@ function CertIcon({ className }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+    </svg>
+  )
+}
+
+function BriefcaseIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
     </svg>
   )
 }

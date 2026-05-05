@@ -4,7 +4,7 @@ import SectionHeader from './ui/SectionHeader'
 import AnimatedSection from './ui/AnimatedSection'
 import Badge from './ui/Badge'
 
-const CATEGORIES = ['Todos', 'Backend', 'Frontend', 'Data', 'AI']
+const CATEGORIES = ['Todos', 'Backend', 'Frontend']
 
 const BADGE_VARIANTS = {
   Backend: 'blue',

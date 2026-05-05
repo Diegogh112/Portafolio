@@ -7,7 +7,7 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation'
 const CATEGORY_COLORS = {
   Backend: { bar: 'from-blue-500 to-cyan-500', badge: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
   Frontend: { bar: 'from-violet-500 to-purple-500', badge: 'text-violet-400 bg-violet-500/10 border-violet-500/20' },
-  'Data & AI': { bar: 'from-emerald-500 to-teal-500', badge: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+  'Data & BI': { bar: 'from-emerald-500 to-teal-500', badge: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
   Tools: { bar: 'from-amber-500 to-orange-500', badge: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
 }
 

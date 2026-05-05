@@ -70,13 +70,15 @@ export default function Hero() {
             <FolderIcon className="w-5 h-5" />
             Ver proyectos
           </button>
-          <button
-            onClick={() => scrollTo('contact')}
+          <a
+            href={personalInfo.github}
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-outline w-full sm:w-auto flex items-center justify-center gap-2"
           >
-            <MailIcon className="w-5 h-5" />
-            Contactarme
-          </button>
+            <GitHubIcon className="w-5 h-5" />
+            GitHub
+          </a>
         </div>
 
         {/* Social links */}
