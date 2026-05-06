@@ -123,23 +123,6 @@ export const projects = [
     color: 'from-emerald-500 to-teal-500',
     icon: '📅',
   },
-  {
-    id: 5,
-    title: 'ft',
-    description:
-      'Repositorio de desarrollo frontend con experimentos y componentes web.',
-    problem:
-      'Necesidad de un espacio para prototipar y probar componentes e interfaces de forma rápida.',
-    solution:
-      'Colección de prototipos y componentes frontend desarrollados para explorar nuevas técnicas y patrones de UI.',
-    technologies: ['HTML', 'CSS', 'JavaScript'],
-    category: 'Frontend',
-    github: 'https://github.com/Diegogh112/ft',
-    demo: null,
-    featured: false,
-    color: 'from-sky-500 to-blue-500',
-    icon: '🧪',
-  },
 ]
 
 export const experience = [

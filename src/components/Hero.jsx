@@ -74,12 +74,7 @@ export default function Hero() {
       {/* Content */}
       <div className="section-container relative z-10 text-center px-4">
         {/* Status badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full 
-                        bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 
-                        text-sm font-medium mb-8 animate-fade-in">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          {personalInfo.available ? 'Disponible para nuevas oportunidades' : 'No disponible actualmente'}
-        </div>
+        <div></div>
 
         {/* Name */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-4 
