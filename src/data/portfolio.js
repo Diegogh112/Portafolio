@@ -4,13 +4,13 @@
 
 export const personalInfo = {
   name: 'Diego Gutierrez',
-  title: 'Software Developer | Data & AI',
-  subtitle: 'Ingeniería de Sistemas de Información — UPC',
+  title: 'Ingeniero de Sistemas de Información',
+  subtitle: 'Backend · Data & BI · Automatización',
   description:
     'Estudiante de 10mo ciclo de Ingeniería de Sistemas de Información (décimo superior), con experiencia en programación, análisis de datos, automatización de procesos y desarrollo de soluciones tecnológicas en entornos bancarios y del Estado.',
   email: 'diegoarmandogh10@gmail.com',
   github: 'https://github.com/Diegogh112',
-  linkedin: 'https://linkedin.com/in/diegoarmando-gutierrez-herrera-507a332a3/',
+  linkedin: 'https://www.linkedin.com/in/diego-armando-gutierrez-herrera-507a332a3/',
   location: 'Lima, Perú',
   available: true,
 }
@@ -91,15 +91,16 @@ export const projects = [
     id: 3,
     title: 'Dashboard',
     description:
-      'Dashboard interactivo desarrollado en JavaScript para visualización y gestión de datos.',
+      'Dashboard interactivo de monitoreo y control del portafolio de proyectos TI del Banco de la Nación, con KPIs en tiempo real, filtros por cartera y estado, y visualización por gerencia.',
     problem:
-      'Necesidad de una interfaz centralizada para visualizar métricas e información de forma clara.',
+      'El equipo necesitaba visibilidad centralizada del avance de requerimientos y proyectos TI sin depender de reportes manuales.',
     solution:
-      'Implementé un dashboard dinámico con JavaScript puro, con componentes interactivos y visualización de datos en tiempo real.',
+      'Desarrollé un dashboard dinámico en JavaScript con gráficos interactivos, filtros en tiempo real y múltiples vistas (Demanda Estratégica, P&D, Transformación Digital, Seguimiento Semanal).',
     technologies: ['JavaScript', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/Dashboard',
-    demo: null,
+    demo: 'https://bnde-dashboard.vercel.app/',
+    image: '/Portafolio/images/dashboard-preview.jpg',
     featured: true,
     color: 'from-amber-500 to-orange-500',
     icon: '📊',
@@ -108,35 +109,36 @@ export const projects = [
     id: 4,
     title: 'Cronograma',
     description:
-      'Aplicación de gestión de cronogramas y planificación de tareas desarrollada en JavaScript.',
+      'Aplicación de visualización de avance de proyectos mediante cronogramas Gantt interactivos, con comparación entre avance planificado y real.',
     problem:
-      'Organizar y visualizar cronogramas de proyectos de forma clara y accesible.',
+      'Organizar y visualizar el avance de proyectos con múltiples entregables y fases de forma clara y accesible para el equipo.',
     solution:
-      'Desarrollé una herramienta de planificación con JavaScript que permite crear, editar y visualizar cronogramas de manera intuitiva.',
+      'Desarrollé una herramienta que genera cronogramas Gantt a partir de datos pegados por el usuario, mostrando % avance planificado vs real con indicadores visuales.',
     technologies: ['JavaScript', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/Cronograma',
-    demo: null,
-    featured: false,
+    demo: 'https://bnavanceproyectos.vercel.app/',
+    image: '/Portafolio/images/cronograma-preview.jpg',
+    featured: true,
     color: 'from-emerald-500 to-teal-500',
     icon: '📅',
   },
   {
     id: 5,
-    title: 'CursoJava',
+    title: 'ft',
     description:
-      'Repositorio de ejercicios y proyectos prácticos del aprendizaje de Java, cubriendo desde fundamentos hasta POO avanzada.',
+      'Repositorio de desarrollo frontend con experimentos y componentes web.',
     problem:
-      'Consolidar el aprendizaje de Java con ejercicios progresivos y bien documentados.',
+      'Necesidad de un espacio para prototipar y probar componentes e interfaces de forma rápida.',
     solution:
-      'Colección estructurada de ejercicios que cubre variables, estructuras de control, POO, colecciones y manejo de excepciones en Java.',
-    technologies: ['Java'],
-    category: 'Backend',
-    github: 'https://github.com/Diegogh112/CursoJava',
+      'Colección de prototipos y componentes frontend desarrollados para explorar nuevas técnicas y patrones de UI.',
+    technologies: ['HTML', 'CSS', 'JavaScript'],
+    category: 'Frontend',
+    github: 'https://github.com/Diegogh112/ft',
     demo: null,
     featured: false,
-    color: 'from-rose-500 to-pink-500',
-    icon: '☕',
+    color: 'from-sky-500 to-blue-500',
+    icon: '🧪',
   },
 ]
 

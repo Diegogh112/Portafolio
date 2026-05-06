@@ -100,6 +100,34 @@ function ProjectCard({ project, isExpanded, onToggle }) {
       {/* Top gradient bar */}
       <div className={`h-1 w-full bg-gradient-to-r ${project.color}`} />
 
+      {/* Preview image */}
+      {project.image && (
+        <div className="relative overflow-hidden h-44 bg-dark-700">
+          <img
+            src={project.image}
+            alt={`Captura de ${project.title}`}
+            className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
+          />
+          {project.demo && (
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute inset-0 flex items-center justify-center 
+                         bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-300"
+              aria-label={`Ver demo de ${project.title}`}
+            >
+              <span className="flex items-center gap-2 px-4 py-2 rounded-lg 
+                               bg-white/10 backdrop-blur border border-white/20 
+                               text-white text-sm font-medium">
+                <ExternalLinkIcon className="w-4 h-4" />
+                Ver app en vivo
+              </span>
+            </a>
+          )}
+        </div>
+      )}
+
       <div className="p-6 flex flex-col flex-1">
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-3">

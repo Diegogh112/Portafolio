@@ -11,8 +11,47 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dark-900"
     >
-      {/* Background grid */}
-      <div className="absolute inset-0 bg-grid opacity-40" aria-hidden="true" />
+      {/* Circuit board background */}
+      <div className="absolute inset-0 opacity-20" aria-hidden="true">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              {/* Horizontal lines */}
+              <line x1="0" y1="25" x2="40" y2="25" stroke="#3b82f6" strokeWidth="0.8"/>
+              <line x1="60" y1="25" x2="100" y2="25" stroke="#3b82f6" strokeWidth="0.8"/>
+              <line x1="0" y1="75" x2="30" y2="75" stroke="#8b5cf6" strokeWidth="0.8"/>
+              <line x1="70" y1="75" x2="100" y2="75" stroke="#8b5cf6" strokeWidth="0.8"/>
+              {/* Vertical lines */}
+              <line x1="25" y1="0" x2="25" y2="40" stroke="#3b82f6" strokeWidth="0.8"/>
+              <line x1="25" y1="60" x2="25" y2="100" stroke="#3b82f6" strokeWidth="0.8"/>
+              <line x1="75" y1="0" x2="75" y2="30" stroke="#8b5cf6" strokeWidth="0.8"/>
+              <line x1="75" y1="70" x2="75" y2="100" stroke="#8b5cf6" strokeWidth="0.8"/>
+              {/* Corner connectors */}
+              <line x1="40" y1="25" x2="40" y2="50" stroke="#3b82f6" strokeWidth="0.8"/>
+              <line x1="40" y1="50" x2="60" y2="50" stroke="#3b82f6" strokeWidth="0.8"/>
+              <line x1="60" y1="50" x2="60" y2="25" stroke="#3b82f6" strokeWidth="0.8"/>
+              <line x1="30" y1="75" x2="30" y2="55" stroke="#8b5cf6" strokeWidth="0.8"/>
+              <line x1="30" y1="55" x2="70" y2="55" stroke="#8b5cf6" strokeWidth="0.8"/>
+              <line x1="70" y1="55" x2="70" y2="75" stroke="#8b5cf6" strokeWidth="0.8"/>
+              {/* Nodes / solder points */}
+              <circle cx="25" cy="25" r="2.5" fill="#3b82f6"/>
+              <circle cx="75" cy="25" r="2" fill="#3b82f6" fillOpacity="0.6"/>
+              <circle cx="25" cy="75" r="2" fill="#8b5cf6" fillOpacity="0.6"/>
+              <circle cx="75" cy="75" r="2.5" fill="#8b5cf6"/>
+              <circle cx="40" cy="50" r="1.5" fill="#60a5fa"/>
+              <circle cx="60" cy="50" r="1.5" fill="#60a5fa"/>
+              <circle cx="50" cy="50" r="3" fill="none" stroke="#60a5fa" strokeWidth="0.8"/>
+              {/* IC chip outline */}
+              <rect x="42" y="38" width="16" height="12" rx="1" fill="none" stroke="#60a5fa" strokeWidth="0.6"/>
+              {/* Binary text hints */}
+              <text x="2" y="12" fontSize="5" fill="#3b82f6" fillOpacity="0.5" fontFamily="monospace">01</text>
+              <text x="80" y="48" fontSize="5" fill="#8b5cf6" fillOpacity="0.5" fontFamily="monospace">10</text>
+              <text x="52" y="95" fontSize="5" fill="#3b82f6" fillOpacity="0.5" fontFamily="monospace">11</text>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#circuit)"/>
+        </svg>
+      </div>
 
       {/* Gradient orbs */}
       <div
@@ -23,6 +62,12 @@ export default function Hero() {
       <div
         className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full 
                    bg-violet-600/20 blur-3xl animate-pulse-slow animate-delay-300"
+        aria-hidden="true"
+      />
+      {/* Extra orb top-right for depth */}
+      <div
+        className="absolute top-10 right-10 w-64 h-64 rounded-full 
+                   bg-cyan-600/10 blur-3xl animate-pulse-slow animate-delay-200"
         aria-hidden="true"
       />
 
@@ -78,6 +123,18 @@ export default function Hero() {
           >
             <GitHubIcon className="w-5 h-5" />
             GitHub
+          </a>
+          <a
+            href="/Portafolio/cv-diego-gutierrez.pdf"
+            download
+            className="w-full sm:w-auto flex items-center justify-center gap-2
+                       px-6 py-3 border border-emerald-500/50 text-emerald-400 font-semibold rounded-lg
+                       hover:bg-emerald-500/10 hover:border-emerald-400
+                       transition-all duration-300 hover:-translate-y-0.5
+                       focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-dark-900"
+          >
+            <DownloadIcon className="w-5 h-5" />
+            Descargar CV
           </a>
         </div>
 
@@ -182,6 +239,14 @@ function ChevronDownIcon({ className }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  )
+}
+
+function DownloadIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
     </svg>
   )
 }
