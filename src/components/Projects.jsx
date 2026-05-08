@@ -233,6 +233,25 @@ function ProjectCard({ project, isExpanded, onToggle }) {
             />
           </button>
         </div>
+
+        {/* Downloads */}
+        {project.downloads && project.downloads.length > 0 && (
+          <div className="mt-3 flex flex-col gap-1.5">
+            {project.downloads.map((dl) => (
+              <a
+                key={dl.file}
+                href={dl.file}
+                download
+                className="flex items-center gap-2 text-xs text-emerald-400 
+                           hover:text-emerald-300 transition-colors"
+                aria-label={`Descargar ${dl.label}`}
+              >
+                <DownloadIcon className="w-3.5 h-3.5 shrink-0" />
+                {dl.label}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </article>
   )
@@ -259,6 +278,14 @@ function ChevronIcon({ className }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  )
+}
+
+function DownloadIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
     </svg>
   )
 }

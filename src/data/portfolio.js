@@ -62,7 +62,7 @@ export const projects = [
       'Se necesitaba un backend robusto que soporte múltiples roles (usuario, profesional de salud, administrador) con autenticación segura y recomendaciones personalizadas.',
     solution:
       'Desarrollé el backend con Node.js y JWT, documentando los endpoints con OpenAPI/Swagger para gestión de productos, usuarios, planes nutricionales y seguimiento de progreso, desplegado en Render.',
-    technologies: ['Node.js', 'Express', 'JWT', 'PostgreSQL', 'OpenAPI / Swagger', 'REST API'],
+    technologies: ['Java','Node.js', 'Express', 'JWT', 'PostgreSQL', 'OpenAPI / Swagger', 'REST API'],
     category: 'Backend',
     github: 'https://github.com/Mari1lm/Vitality---Arquitectura-web',
     demo: 'https://vitality-arquitectura-web.onrender.com/',
@@ -103,8 +103,12 @@ export const projects = [
     technologies: ['React', 'JavaScript', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/Dashboard',
-    demo: 'https://bnde-dashboard.vercel.app/',
+    demo: 'https://dashboard-git-version-3-diegos-projects-1d8bb0e8.vercel.app/',
     image: '/Portafolio/images/dashboard-preview.jpg',
+    downloads: [
+      { label: 'Portafolio de Proyectos 2026 (ejemplo)', file: '/Portafolio/Portafolios/Portafolio_de_Proyectos_2026 ejemplo.xlsx' },
+      { label: 'Portafolio Demanda TI (ejemplo)', file: '/Portafolio/Portafolios/Portafolio_Demanda_TI ejemplo.xlsm' },
+    ],
     featured: true,
     color: 'from-amber-500 to-orange-500',
     icon: '📊',
@@ -160,7 +164,7 @@ export const experience = [
     company: 'SUNAT',
     period: 'Marzo 2025 — Diciembre 2025',
     description: 'Pruebas de rendimiento con Apache JMeter, scripts JavaScript para análisis de resultados, implementación de servicios OpenAPI (YAML), desarrollo de macros XML para automatizar pruebas y apoyo en control de calidad bajo metodologías ágiles.',
-    technologies: ['JavaScript', 'JMeter', 'OpenAPI', 'XML', 'Scrum'],
+    technologies: ['Java','JavaScript', 'JMeter', 'OpenAPI', 'XML', 'Scrum'],
   },
 ]
 
