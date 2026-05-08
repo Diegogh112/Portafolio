@@ -155,18 +155,6 @@ export default function Hero() {
         </p>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <button
-          onClick={() => scrollTo('about')}
-          className="flex flex-col items-center gap-1 text-slate-500 
-                     hover:text-blue-400 transition-colors focus:outline-none"
-          aria-label="Ir a la siguiente sección"
-        >
-          <span className="text-xs font-mono">scroll</span>
-          <ChevronDownIcon className="w-5 h-5" />
-        </button>
-      </div>
     </section>
   )
 }
