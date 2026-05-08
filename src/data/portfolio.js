@@ -129,21 +129,21 @@ export const projects = [
   },
   {
     id: 5,
-    title: 'Pasarela de Ventas',
+    title: 'DocAI Assistant',
     description:
-      'Sistema completo de pasarela de ventas y pagos con catálogo de productos, carrito de compras, checkout y gestión de pedidos.',
+      'Asistente de análisis de documentos con IA: sube un PDF o pega texto y hazle preguntas en lenguaje natural. La IA responde exclusivamente basándose en el contenido del documento.',
     problem:
-      'Necesidad de un sistema de ventas online con flujo completo desde catálogo hasta confirmación de pedido.',
+      'Los usuarios necesitaban una forma rápida de extraer información y resolver dudas sobre documentos extensos sin leerlos completos.',
     solution:
-      'Desarrollé una aplicación web con Spring Boot y Thymeleaf con arquitectura MVC, carrito en sesión, filtros por categoría y proceso de checkout completo.',
-    technologies: ['Java 17', 'Spring Boot', 'Thymeleaf', 'Maven', 'HTML/CSS'],
-    category: 'Backend',
-    github: 'https://github.com/Diegogh112/Apps',
-    demo: null,
-    image: null,
-    featured: false,
+      'Desarrollé un sistema full-stack con FastAPI + Google Gemini en el backend y HTML/CSS/JS puro en el frontend, con chat con historial, carga de PDF/TXT por drag & drop y respuestas ancladas al documento.',
+    technologies: ['Python', 'FastAPI', 'Google Gemini', 'JavaScript', 'HTML/CSS'],
+    category: 'FullStack',
+    github: 'https://github.com/Diegogh112/IA',
+    demo: 'https://ia-neon-eight.vercel.app/',
+    image: '/Portafolio/images/ia.jpg',
+    featured: true,
     color: 'from-rose-500 to-pink-500',
-    icon: '🛒',
+    icon: '🤖',
   },
 ]
 

@@ -21,7 +21,7 @@ export default function Projects() {
     activeFilter === 'Todos'
       ? projects
       : activeFilter === 'FullStack'
-      ? projects.filter((p) => p.id === 1 || p.id === 2)
+      ? projects.filter((p) => p.category === 'FullStack')
       : projects.filter((p) => p.category === activeFilter)
 
   return (
