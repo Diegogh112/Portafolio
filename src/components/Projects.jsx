@@ -91,24 +91,21 @@ export default function Projects() {
 function ProjectCard({ project, isExpanded, onToggle }) {
   return (
     <article
-      className={`
-        relative flex flex-col rounded-xl border transition-all duration-300 overflow-hidden
+      className="relative flex flex-col rounded-xl border transition-all duration-300 overflow-hidden
         bg-dark-600 border-slate-700/50
         hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/10
-        hover:-translate-y-1
-        ${project.featured ? 'ring-1 ring-blue-500/20' : ''}
-      `}
+        hover:-translate-y-1"
     >
       {/* Top gradient bar */}
       <div className={`h-1 w-full bg-gradient-to-r ${project.color}`} />
 
       {/* Preview image */}
       {project.image && (
-        <div className="relative overflow-hidden h-44 bg-dark-700">
+        <div className="relative bg-dark-700" style={{ height: '180px' }}>
           <img
             src={project.image}
             alt={`Captura de ${project.title}`}
-            className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
+            className="w-full h-full object-contain object-center transition-transform duration-500 hover:scale-105"
           />
           {project.demo && (
             <a
@@ -132,26 +129,18 @@ function ProjectCard({ project, isExpanded, onToggle }) {
 
       <div className="p-6 flex flex-col flex-1">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl" role="img" aria-label={project.title}>
-              {project.icon}
-            </span>
-            <div>
-              <h3 className="text-white font-semibold text-base leading-tight">
-                {project.title}
-              </h3>
-              <Badge variant={BADGE_VARIANTS[project.category] || 'blue'} className="mt-1">
-                {project.category}
-              </Badge>
-            </div>
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-2xl" role="img" aria-label={project.title}>
+            {project.icon}
+          </span>
+          <div>
+            <h3 className="text-white font-semibold text-base leading-tight">
+              {project.title}
+            </h3>
+            <Badge variant={BADGE_VARIANTS[project.category] || 'blue'} className="mt-1">
+              {project.category}
+            </Badge>
           </div>
-          {project.featured && (
-            <span className="flex-shrink-0 px-2 py-0.5 text-xs rounded-full 
-                             bg-amber-500/10 text-amber-400 border border-amber-500/20">
-              ⭐ Destacado
-            </span>
-          )}
         </div>
 
         {/* Description */}
