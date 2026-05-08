@@ -55,41 +55,45 @@ export const skills = {
 export const projects = [
   {
     id: 1,
-    title: 'Pasarela de Ventas',
+    title: 'Vitality — Backend',
     description:
-      'Sistema completo de pasarela de ventas y pagos con catálogo de productos, carrito de compras, checkout y gestión de pedidos.',
+      'API REST de la plataforma Vitality: sistema web potenciado por IA para nutrición y bienestar, con gestión de usuarios, planes nutricionales, seguimiento de objetivos y asistencia virtual.',
     problem:
-      'Necesidad de un sistema de ventas online con flujo completo desde catálogo hasta confirmación de pedido.',
+      'Se necesitaba un backend robusto que soporte múltiples roles (usuario, profesional de salud, administrador) con autenticación segura y recomendaciones personalizadas.',
     solution:
-      'Desarrollé una aplicación web con Spring Boot y Thymeleaf con arquitectura MVC, carrito en sesión, filtros por categoría y proceso de checkout completo.',
-    technologies: ['Java 17', 'Spring Boot', 'Thymeleaf', 'Maven', 'HTML/CSS'],
+      'Desarrollé el backend con Spring Boot y JWT, implementando endpoints REST para gestión de productos, usuarios, planes nutricionales y seguimiento de progreso, desplegado en Render.',
+    technologies: ['Java', 'Spring Boot', 'JWT', 'PostgreSQL', 'REST API'],
     category: 'Backend',
-    github: 'https://github.com/Diegogh112/Apps',
-    demo: null,
+    github: 'https://github.com/Mari1lm/Vitality---Arquitectura-web',
+    demo: 'https://vitality-arquitectura-web.onrender.com/',
+    image: '/Portafolio/images/VitalityBack.jpg',
+    demoNote: '⚠️ El servicio puede tardar ~30s en iniciar por inactividad (Render free tier).',
     featured: true,
     color: 'from-blue-500 to-cyan-500',
-    icon: '🛒',
+    icon: '🍃',
   },
   {
     id: 2,
-    title: 'VitalityFront',
+    title: 'Vitality — Frontend',
     description:
-      'Aplicación frontend desarrollada con TypeScript orientada a la gestión de salud y bienestar.',
+      'Interfaz web de la plataforma Vitality para nutrición y bienestar, con registro de usuarios, búsqueda de productos, objetivos de salud y seguimiento de progreso.',
     problem:
-      'Interfaz moderna y tipada para una plataforma de salud que requería componentes reutilizables y mantenibles.',
+      'Los usuarios necesitaban una interfaz moderna e intuitiva para interactuar con las funcionalidades de IA y nutrición de la plataforma.',
     solution:
-      'Construí el frontend con TypeScript garantizando tipado estático, mejor mantenibilidad y reducción de errores en tiempo de ejecución.',
-    technologies: ['TypeScript', 'HTML/CSS'],
+      'Construí el frontend con TypeScript conectado al backend REST, con vistas diferenciadas para usuarios, profesionales de salud y administradores.',
+    technologies: ['TypeScript', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/VitalityFront',
-    demo: null,
+    demo: 'https://vitalityfront.netlify.app/',
+    image: '/Portafolio/images/VitalityFront.jpg',
+    demoNote: '⚠️ Activa primero el backend para que funcione correctamente.',
     featured: true,
     color: 'from-violet-500 to-purple-500',
     icon: '💪',
   },
   {
     id: 3,
-    title: 'Dashboard',
+    title: 'Dashboard — Portafolio de Proyectos TI',
     description:
       'Dashboard interactivo de monitoreo y control del portafolio de proyectos TI del Banco de la Nación, con KPIs en tiempo real, filtros por cartera y estado, y visualización por gerencia.',
     problem:
@@ -107,7 +111,7 @@ export const projects = [
   },
   {
     id: 4,
-    title: 'Cronograma',
+    title: 'Cronograma — Avance de Proyectos',
     description:
       'Aplicación de visualización de avance de proyectos mediante cronogramas Gantt interactivos, con comparación entre avance planificado y real.',
     problem:
@@ -122,6 +126,24 @@ export const projects = [
     featured: true,
     color: 'from-emerald-500 to-teal-500',
     icon: '📅',
+  },
+  {
+    id: 5,
+    title: 'Pasarela de Ventas',
+    description:
+      'Sistema completo de pasarela de ventas y pagos con catálogo de productos, carrito de compras, checkout y gestión de pedidos.',
+    problem:
+      'Necesidad de un sistema de ventas online con flujo completo desde catálogo hasta confirmación de pedido.',
+    solution:
+      'Desarrollé una aplicación web con Spring Boot y Thymeleaf con arquitectura MVC, carrito en sesión, filtros por categoría y proceso de checkout completo.',
+    technologies: ['Java 17', 'Spring Boot', 'Thymeleaf', 'Maven', 'HTML/CSS'],
+    category: 'Backend',
+    github: 'https://github.com/Diegogh112/Apps',
+    demo: null,
+    image: null,
+    featured: false,
+    color: 'from-rose-500 to-pink-500',
+    icon: '🛒',
   },
 ]
 

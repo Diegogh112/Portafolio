@@ -4,7 +4,7 @@ import SectionHeader from './ui/SectionHeader'
 import AnimatedSection from './ui/AnimatedSection'
 import Badge from './ui/Badge'
 
-const CATEGORIES = ['Todos', 'Backend', 'Frontend']
+const CATEGORIES = ['Todos', 'FullStack', 'Frontend', 'Backend']
 
 const BADGE_VARIANTS = {
   Backend: 'blue',
@@ -20,6 +20,8 @@ export default function Projects() {
   const filtered =
     activeFilter === 'Todos'
       ? projects
+      : activeFilter === 'FullStack'
+      ? projects.filter((p) => p.id === 1 || p.id === 2)
       : projects.filter((p) => p.category === activeFilter)
 
   return (
@@ -191,6 +193,14 @@ function ProjectCard({ project, isExpanded, onToggle }) {
             </span>
           ))}
         </div>
+
+        {/* Demo note */}
+        {project.demoNote && (
+          <p className="text-xs text-amber-400/80 bg-amber-500/10 border border-amber-500/20 
+                         rounded-lg px-3 py-2 mb-3">
+            {project.demoNote}
+          </p>
+        )}
 
         {/* Actions */}
         <div className="flex items-center gap-3 mt-auto pt-4 border-t border-slate-700/50">
