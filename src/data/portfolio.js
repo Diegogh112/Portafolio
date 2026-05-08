@@ -61,8 +61,8 @@ export const projects = [
     problem:
       'Se necesitaba un backend robusto que soporte múltiples roles (usuario, profesional de salud, administrador) con autenticación segura y recomendaciones personalizadas.',
     solution:
-      'Desarrollé el backend con Spring Boot y JWT, implementando endpoints REST para gestión de productos, usuarios, planes nutricionales y seguimiento de progreso, desplegado en Render.',
-    technologies: ['Java', 'Spring Boot', 'JWT', 'PostgreSQL', 'REST API'],
+      'Desarrollé el backend con Node.js y JWT, documentando los endpoints con OpenAPI/Swagger para gestión de productos, usuarios, planes nutricionales y seguimiento de progreso, desplegado en Render.',
+    technologies: ['Node.js', 'Express', 'JWT', 'PostgreSQL', 'OpenAPI / Swagger', 'REST API'],
     category: 'Backend',
     github: 'https://github.com/Mari1lm/Vitality---Arquitectura-web',
     demo: 'https://vitality-arquitectura-web.onrender.com/',
@@ -80,8 +80,8 @@ export const projects = [
     problem:
       'Los usuarios necesitaban una interfaz moderna e intuitiva para interactuar con las funcionalidades de IA y nutrición de la plataforma.',
     solution:
-      'Construí el frontend con TypeScript conectado al backend REST, con vistas diferenciadas para usuarios, profesionales de salud y administradores.',
-    technologies: ['TypeScript', 'HTML', 'CSS'],
+      'Construí el frontend con Angular y TypeScript conectado al backend REST, con vistas diferenciadas para usuarios, profesionales de salud y administradores, usando SQL Server como base de datos.',
+    technologies: ['Angular', 'TypeScript', 'SQL Server', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/VitalityFront',
     demo: 'https://vitalityfront.netlify.app/',
@@ -100,7 +100,7 @@ export const projects = [
       'El equipo necesitaba visibilidad centralizada del avance de requerimientos y proyectos TI sin depender de reportes manuales.',
     solution:
       'Desarrollé un dashboard dinámico en JavaScript con gráficos interactivos, filtros en tiempo real y múltiples vistas (Demanda Estratégica, P&D, Transformación Digital, Seguimiento Semanal).',
-    technologies: ['JavaScript', 'HTML', 'CSS'],
+    technologies: ['React', 'JavaScript', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/Dashboard',
     demo: 'https://bnde-dashboard.vercel.app/',
