@@ -219,6 +219,19 @@ function ProjectCard({ project, isExpanded, onToggle }) {
             </a>
           )}
 
+          {project.download && (
+            <a
+              href={project.download}
+              download
+              className="flex items-center gap-1.5 text-sm text-emerald-400 
+                         hover:text-emerald-300 transition-colors"
+              aria-label={`Descargar ${project.title}`}
+            >
+              <DownloadIcon className="w-4 h-4" />
+              Descargar
+            </a>
+          )}
+
           <button
             onClick={onToggle}
             className="ml-auto flex items-center gap-1 text-xs text-slate-500 

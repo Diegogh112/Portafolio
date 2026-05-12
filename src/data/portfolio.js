@@ -145,9 +145,29 @@ export const projects = [
     github: 'https://github.com/Diegogh112/IA',
     demo: 'https://ia-neon-eight.vercel.app/',
     image: '/Portafolio/images/ia.jpg',
+    demoNote: '⚠️ El backend puede tardar ~30s en iniciar por inactividad (Render free tier).',
     featured: true,
     color: 'from-rose-500 to-pink-500',
     icon: '🤖',
+  },
+  {
+    id: 6,
+    title: 'Sistema de Gestión de Ventas',
+    description:
+      'Aplicación de escritorio en C# con .NET Framework 4.7.2 (Windows Forms) conectada a SQL Server. Gestión completa de clientes, productos, categorías, pedidos y reportes con arquitectura en 4 capas.',
+    problem:
+      'Necesidad de un sistema de escritorio que maneje el ciclo completo de ventas con múltiples entidades relacionadas, validaciones de negocio y consistencia transaccional.',
+    solution:
+      'Desarrollé la app con arquitectura Modelo–Datos–Negocio–Presentación, consultas parametrizadas para prevenir SQL injection, transacciones SqlTransaction en pedidos y 5 módulos CRUD independientes.',
+    technologies: ['C#', '.NET Framework', 'Windows Forms', 'SQL Server', 'ADO.NET'],
+    category: 'Backend',
+    github: 'https://github.com/Diegogh112/GestionVentas',
+    demo: null,
+    download: 'https://github.com/Diegogh112/GestionVentas/archive/refs/heads/main.zip',
+    image: null,
+    featured: true,
+    color: 'from-indigo-500 to-blue-500',
+    icon: '🖥️',
   },
 ]
 
