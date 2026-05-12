@@ -4,9 +4,11 @@ import SectionHeader from './ui/SectionHeader'
 import AnimatedSection from './ui/AnimatedSection'
 import Badge from './ui/Badge'
 
-const CATEGORIES = ['Todos', 'FullStack', 'Frontend', 'Backend']
+const CATEGORIES = ['Todos', 'FullStack / Desktop Apps', 'Frontend', 'Backend']
 
 const BADGE_VARIANTS = {
+  'Desktop App': 'rose',
+  FullStack: 'rose' , 
   Backend: 'blue',
   Frontend: 'violet',
   Data: 'amber',
@@ -20,8 +22,8 @@ export default function Projects() {
   const filtered =
     activeFilter === 'Todos'
       ? projects
-      : activeFilter === 'FullStack'
-      ? projects.filter((p) => p.category === 'FullStack')
+      : activeFilter === 'FullStack / Desktop Apps'
+      ? projects.filter((p) => p.category === 'FullStack' || p.category === 'Desktop App')
       : projects.filter((p) => p.category === activeFilter)
 
   return (

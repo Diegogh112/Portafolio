@@ -28,7 +28,7 @@ export const skills = {
     { name: 'FastAPI', icon: '⚡' },
     { name: 'Java', icon: '☕' },
     { name: 'C# / .NET', icon: '�' },
-    { name: 'C++ / C', icon: '⚙️' },
+    { name: 'REST API', icon: '⚙️' },
     { name: 'VBA', icon: '📋' },
     { name: 'Spring Boot', icon: '🍃' },
   ],
@@ -109,7 +109,7 @@ export const projects = [
     technologies: ['React', 'JavaScript', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/Dashboard',
-    demo: 'https://dashboard-git-version-3-diegos-projects-1d8bb0e8.vercel.app/',
+    demo: 'https://bnde-dashboard.vercel.app/',
     image: '/Portafolio/images/dashboard-preview.jpg',
     downloads: [
       { label: 'Portafolio de Proyectos 2026 (ejemplo)', file: '/Portafolio/Portafolios/Portafolio_de_Proyectos_2026 ejemplo.xlsx' },
@@ -166,7 +166,7 @@ export const projects = [
     solution:
       'Desarrollé la app con arquitectura Modelo–Datos–Negocio–Presentación, consultas parametrizadas para prevenir SQL injection, transacciones SqlTransaction en pedidos y 5 módulos CRUD independientes.',
     technologies: ['C#', '.NET Framework', 'Windows Forms', 'SQL Server', 'ADO.NET'],
-    category: 'Backend',
+    category: 'Desktop App',
     github: 'https://github.com/Diegogh112/GestionVentas',
     demo: null,
     download: '/Portafolio/SistemaVentas_Setup_v1.0.0.exe',
