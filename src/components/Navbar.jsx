@@ -7,7 +7,6 @@ const NAV_LINKS = [
   { label: 'Sobre mí', href: 'about' },
   { label: 'Proyectos', href: 'projects' },
   { label: 'Habilidades', href: 'skills' },
-  { label: 'Contacto', href: 'contact' },
 ]
 
 // Pre-computed outside the component so the array reference is stable

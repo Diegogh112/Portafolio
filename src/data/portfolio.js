@@ -30,6 +30,7 @@ export const skills = {
     { name: 'C# / .NET', icon: '�' },
     { name: 'C++ / C', icon: '⚙️' },
     { name: 'VBA', icon: '📋' },
+    { name: 'Spring Boot', icon: '🍃' },
   ],
   Frontend: [
     { name: 'JavaScript', icon: '🟨' },
@@ -67,7 +68,7 @@ export const projects = [
       'Se necesitaba un backend robusto que soporte múltiples roles (usuario, profesional de salud, administrador) con autenticación segura y recomendaciones personalizadas.',
     solution:
       'Desarrollé el backend con Node.js y JWT, documentando los endpoints con OpenAPI/Swagger para gestión de productos, usuarios, planes nutricionales y seguimiento de progreso, desplegado en Render.',
-    technologies: ['Java','Node.js', 'Express', 'JWT', 'PostgreSQL', 'OpenAPI / Swagger', 'REST API'],
+    technologies: ['Java','Node.js', 'Express', 'JWT', 'PostgreSQL', 'OpenAPI / Swagger', 'REST API', 'Spring Boot'],
     category: 'Backend',
     github: 'https://github.com/Mari1lm/Vitality---Arquitectura-web',
     demo: 'https://vitality-arquitectura-web.onrender.com/',
