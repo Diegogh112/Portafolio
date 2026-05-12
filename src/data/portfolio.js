@@ -20,7 +20,7 @@ export const aboutDescription = [
   'Me especializo en la transformación digital de operaciones mediante Python, Power BI, VBA e inteligencia artificial, aplicando análisis de datos y mejora continua de procesos.',
   'He trabajado en el Banco de la Nación y en SUNAT, donde desarrollé dashboards, automaticé reportes, implementé APIs y ejecuté pruebas de rendimiento bajo metodologías ágiles.',
 ]
-
+//a
 export const skills = {
   Backend: [
     { name: 'Python', icon: '🐍' },
