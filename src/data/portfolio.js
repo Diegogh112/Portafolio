@@ -109,7 +109,7 @@ export const projects = [
     technologies: ['React', 'JavaScript', 'HTML', 'CSS'],
     category: 'Frontend',
     github: 'https://github.com/Diegogh112/Dashboard',
-    demo: 'https://bnde-dashboard.vercel.app/',
+    demo: '',
     image: '/Portafolio/images/dashboard-preview.jpg',
     downloads: [
       { label: 'Portafolio de Proyectos 2026 (ejemplo)', file: '/Portafolio/Portafolios/Portafolio_de_Proyectos_2026 ejemplo.xlsx' },
